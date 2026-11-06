@@ -1,0 +1,44 @@
+{
+  "name": "babajee-erp",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0",
+    "expo": "~57.0.32",
+    "expo-dev-client": "~57.0.21",
+    "expo-secure-store": "~57.0.4",
+    "expo-status-bar": "~57.0.1",
+    "expo-system-ui": "~57.0.4",
+    "i18next": "^25.5.2",
+    "nativewind": "5.0.0-rc.0",
+    "react": "19.2.3",
+    "react-i18next": "^16.0.0",
+    "react-native": "0.86.3",
+    "react-native-css": "3.1.0-rc.0",
+    "react-native-reanimated": "4.5.1",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-url-polyfill": "^2.0.0",
+    "react-native-worklets": "0.10.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/react": "~19.2.2",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.13",
+    "typescript": "~6.0.3"
+  },
+  "overrides": {
+    "lightningcss": "1.29.2",
+    "@expo/fingerprint": {
+      "glob": "14.0.4",
+      "minimatch": "11.0.5"
+    }
+  }
+}

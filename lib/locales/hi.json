@@ -1,0 +1,68 @@
+{
+  "common": {
+    "appName": "बाबा जी ERP",
+    "save": "सहेजें",
+    "cancel": "रद्द करें",
+    "search": "खोजें",
+    "loading": "लोड हो रहा है...",
+    "error": "कुछ गलत हो गया",
+    "success": "हो गया",
+    "language": "भाषा"
+  },
+  "auth": {
+    "signIn": "लॉग इन करें",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "signOut": "लॉग आउट करें",
+    "noAccount": "अपना अकाउंट बनाने के लिए मालिक से संपर्क करें।"
+  },
+  "pos": {
+    "title": "बिलिंग",
+    "newSale": "नई बिक्री",
+    "product": "उत्पाद",
+    "quantity": "मात्रा",
+    "unitPrice": "प्रति इकाई मूल्य",
+    "subtotal": "उप-योग",
+    "discount": "छूट",
+    "total": "कुल",
+    "addItem": "आइटम जोड़ें",
+    "removeItem": "आइटम हटाएँ",
+    "checkout": "बिक्री पूरी करें",
+    "cash": "नकद",
+    "upi": "यूपीआई",
+    "credit": "उधार",
+    "splitPayment": "मिश्रित भुगतान",
+    "tokenOnly": "केवल टोकन",
+    "billOnly": "केवल बिल",
+    "tokenAndBill": "टोकन + बिल",
+    "silent": "बिना प्रिंट",
+    "recentSales": "हाल की बिक्री",
+    "reprintBill": "बिल दोबारा प्रिंट करें"
+  },
+  "inventory": {
+    "title": "स्टॉक",
+    "products": "उत्पाद",
+    "rawMaterials": "कच्चा माल",
+    "stockIn": "स्टॉक जमा करें",
+    "batch": "बैच",
+    "expiryDate": "समाप्ति तिथि",
+    "quantityOnHand": "उपलब्ध मात्रा",
+    "wastage": "बर्बादी",
+    "expired": "समाप्त",
+    "available": "उपलब्ध"
+  },
+  "dashboard": {
+    "title": "डैशबोर्ड",
+    "salesToday": "आज की बिक्री",
+    "cash": "नकद",
+    "upi": "यूपीआई",
+    "expenses": "खर्च",
+    "netProfit": "शुद्ध लाभ",
+    "dailyClosing": "दिन का हिसाब"
+  },
+  "roles": {
+    "owner": "मालिक",
+    "manager": "मैनेजर",
+    "staff": "बिलिंग स्टाफ"
+  }
+}

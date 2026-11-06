@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Babajee ERP",
+    "slug": "babajee-erp",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "automatic",
+    "icon": "./assets/logo.png",
+    "splash": {
+      "image": "./assets/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFFDF9"
+    },
+    "android": {
+      "package": "com.babajeemishthanbhandar.erp",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/logo.png",
+        "backgroundColor": "#FFFDF9"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.babajeemishthanbhandar.erp"
+    },
+    "plugins": [
+      "expo-secure-store"
+    ],
+    "web": {
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "5dd56dc7-d97c-4cbf-88eb-19ff942b9219"
+      }
+    }
+  }
+}

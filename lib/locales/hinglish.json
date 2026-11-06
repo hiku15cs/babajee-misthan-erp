@@ -1,0 +1,68 @@
+{
+  "common": {
+    "appName": "Babajee ERP",
+    "save": "Save karo",
+    "cancel": "Cancel karo",
+    "search": "Search karo",
+    "loading": "Load ho raha hai...",
+    "error": "Kuch problem ho gayi",
+    "success": "Ho gaya",
+    "language": "Language"
+  },
+  "auth": {
+    "signIn": "Login karo",
+    "email": "Email",
+    "password": "Password",
+    "signOut": "Logout karo",
+    "noAccount": "Account banwane ke liye owner se baat karein."
+  },
+  "pos": {
+    "title": "Billing",
+    "newSale": "Nayi sale",
+    "product": "Product",
+    "quantity": "Quantity",
+    "unitPrice": "Per unit price",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "total": "Total",
+    "addItem": "Item add karo",
+    "removeItem": "Item hatao",
+    "checkout": "Sale complete karo",
+    "cash": "Cash",
+    "upi": "UPI",
+    "credit": "Udhaar",
+    "splitPayment": "Split payment",
+    "tokenOnly": "Sirf token",
+    "billOnly": "Sirf bill",
+    "tokenAndBill": "Token + bill",
+    "silent": "Silent (print nahi)",
+    "recentSales": "Recent sales",
+    "reprintBill": "Bill dobara print karo"
+  },
+  "inventory": {
+    "title": "Inventory",
+    "products": "Products",
+    "rawMaterials": "Raw material",
+    "stockIn": "Stock add karo",
+    "batch": "Batch",
+    "expiryDate": "Expiry date",
+    "quantityOnHand": "Available quantity",
+    "wastage": "Wastage",
+    "expired": "Expire ho gaya",
+    "available": "Available"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "salesToday": "Aaj ki sale",
+    "cash": "Cash",
+    "upi": "UPI",
+    "expenses": "Kharcha",
+    "netProfit": "Net profit",
+    "dailyClosing": "Din ka hisaab"
+  },
+  "roles": {
+    "owner": "Owner",
+    "manager": "Manager",
+    "staff": "Billing staff"
+  }
+}

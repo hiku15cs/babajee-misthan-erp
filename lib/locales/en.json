@@ -1,0 +1,68 @@
+{
+  "common": {
+    "appName": "Babajee ERP",
+    "save": "Save",
+    "cancel": "Cancel",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "success": "Done",
+    "language": "Language"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "signOut": "Sign out",
+    "noAccount": "Ask an owner to create your account."
+  },
+  "pos": {
+    "title": "Billing",
+    "newSale": "New sale",
+    "product": "Product",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "total": "Total",
+    "addItem": "Add item",
+    "removeItem": "Remove item",
+    "checkout": "Complete sale",
+    "cash": "Cash",
+    "upi": "UPI",
+    "credit": "Customer credit",
+    "splitPayment": "Split payment",
+    "tokenOnly": "Token only",
+    "billOnly": "Bill only",
+    "tokenAndBill": "Token + bill",
+    "silent": "Silent (no print)",
+    "recentSales": "Recent sales",
+    "reprintBill": "Reprint bill"
+  },
+  "inventory": {
+    "title": "Inventory",
+    "products": "Products",
+    "rawMaterials": "Raw materials",
+    "stockIn": "Stock in",
+    "batch": "Batch",
+    "expiryDate": "Expiry date",
+    "quantityOnHand": "Quantity on hand",
+    "wastage": "Wastage",
+    "expired": "Expired",
+    "available": "Available"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "salesToday": "Today's sales",
+    "cash": "Cash",
+    "upi": "UPI",
+    "expenses": "Expenses",
+    "netProfit": "Net profit",
+    "dailyClosing": "Daily closing"
+  },
+  "roles": {
+    "owner": "Owner",
+    "manager": "Manager",
+    "staff": "Billing staff"
+  }
+}
