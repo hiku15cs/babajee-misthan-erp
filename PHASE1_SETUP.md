@@ -22,10 +22,12 @@ implemented in this foundation phase.
 To reproduce the project from scratch in a new directory:
 
 ```sh
-npx create-expo-app@latest babajee-erp --template blank-typescript@sdk-57
+npx create-expo-app@latest babajee-erp --template blank-typescript@sdk-58
 cd babajee-erp
 npm install nativewind@5.0.0-rc.0 react-native-css@3.1.0-rc.0 tailwindcss@^4 @tailwindcss/postcss postcss @supabase/supabase-js i18next react-i18next react-native-url-polyfill
 npx expo install expo-dev-client expo-secure-store expo-status-bar expo-system-ui react-native-reanimated react-native-worklets react-native-safe-area-context
+npx expo install expo-router expo-sqlite expo-network expo-crypto react-native-web
+npm install zustand
 npm pkg set overrides.lightningcss=1.29.2
 ```
 
@@ -47,8 +49,9 @@ npx expo start
 The `@supabase/supabase-js` package includes the required React Native auth
 support. The URL polyfill is imported by `App.tsx`. NativeWind 5 is currently
 an RC; these files pair `nativewind@5.0.0-rc.0` with
-`react-native-css@3.1.0-rc.0` and Tailwind CSS 4 on Expo SDK 57, the SDK version
-in the NativeWind v5 tested target. Check the [NativeWind v5
+`react-native-css@3.1.0-rc.0` and Tailwind CSS 4 on Expo SDK 58. NativeWind
+currently documents SDK 57 as its tested target, although this project’s SDK 58
+Android and web bundles are validated locally. Check the [NativeWind v5
 installation guide](https://www.nativewind.dev/v5/getting-started/installation)
 before upgrading those versions. The Lightning CSS override is required to
 avoid CSS deserialization errors documented by NativeWind. NativeWind v4 is
@@ -181,9 +184,10 @@ build.
    Open the installed **Babajee ERP** development app and scan the terminal or
    browser QR code. Keep the phone and computer on the same Wi-Fi.
 
-The development build installs the current Phase 1 starter screen. It is not
-yet the ERP login/POS app; the owner accounts exist in Supabase, but login and
-billing screens still need to be implemented.
+The development build installs the current app version. A standalone preview
+APK can be built without starting Metro; see
+[`PHASE5_OFFLINE_AND_BUILDS.md`](./PHASE5_OFFLINE_AND_BUILDS.md) for the cloud
+build and tablet-install steps.
 
 ## Important security and operational notes
 
@@ -193,7 +197,42 @@ billing screens still need to be implemented.
 - Product and raw-material row changes are logged with `auth.uid()` and the
   profile name captured at the time of the change. Operations from SQL Editor
   have no signed-in user and are recorded as `System / unknown user`.
-- The migrations provide the base tables and row-level access rules. They do
-  not yet implement database-side stock deduction, expiry blocking, payment
-  balancing, offline synchronization, or the full feature-guide workflows;
-  those need transactional RPCs and the later application phases.
+- The initial migration provides the base tables and row-level access rules.
+  Later migrations add expiry-aware stock deduction and offline sales sync.
+  The sales queue requires the Phase 3 migration before the Phase 5 migration.
+
+  ## Phase 3 inventory screens and migration
+
+  Phase 3 adds the Expo Router inventory routes:
+
+  - `app/(inventory)/procurement.tsx` — dairy, grocery, and fuel receiving with
+    quantity × unit-rate totals and purchase-rate history.
+  - `app/(inventory)/fmcg-batches.tsx` — barcode input, product/batch data,
+    manufacturing and expiry dates, MRP, purchase rate, and quantity.
+  - `app/(inventory)/expiry-watchlist.tsx` — expiry status dashboard and
+    quantity-controlled vendor returns.
+
+  Apply `supabase/migrations/202611130001_procurement_fmcg_expiry.sql` in the
+  Supabase SQL Editor after the initial schema migration. It adds procurement
+  history, FMCG batch fields, vendor-return history, role-checked/idempotent
+  inventory RPCs, and the server-side FEFO stock-consumption function. Inventory
+  writes are stored first in an Expo SQLite outbox (browser testing uses browser
+  storage) and sync when a network is available. If an RPC is rejected, the item
+  remains queued and the screen shows the sync error; fix the account/permission
+  issue before retrying.
+
+Owners and Managers can sign in to use these inventory screens. The two
+existing owner accounts work with the app login. Barcode scanners that act as
+a keyboard and send Enter can fill the barcode field. FEFO allocation helpers
+in `stores/cartStore.ts` filter expired stock and allocate soonest-expiring
+batches first. The atomic sale sync RPC is available in
+`supabase/migrations/202611130002_offline_sales_sync.sql`; a POS checkout still
+needs to call `queueOfflineTransaction` from `lib/offlineSync.ts` to use it.
+
+## Phase 5 offline sales and APK builds
+
+See [`PHASE5_OFFLINE_AND_BUILDS.md`](./PHASE5_OFFLINE_AND_BUILDS.md) for the
+sales queue contract, migration order, direct Bluetooth printer helper, EAS
+preview/development profiles, and tablet installation instructions. The
+current direct thermal printer bridge supports paired Bluetooth printers;
+USB OTG requires a compatible native printer transport.

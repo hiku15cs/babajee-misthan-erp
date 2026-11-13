@@ -2,14 +2,25 @@ import "./global.css";
 import "react-native-url-polyfill/auto";
 import { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StyleSheet, Text, View } from "react-native";
+import {
+  SafeAreaProvider,
+  SafeAreaView,
+} from "react-native-safe-area-context";
 import { I18nextProvider, useTranslation } from "react-i18next";
 
 import i18n, { i18nReady } from "./lib/i18n";
 import { connectSupabaseAuthToAppState } from "./lib/supabase";
 
 export default function App() {
+  return (
+    <SafeAreaProvider>
+      <AppContent />
+    </SafeAreaProvider>
+  );
+}
+
+function AppContent() {
   const [i18nInitialized, setI18nInitialized] = useState(false);
   const [initializationError, setInitializationError] = useState<string>();
 
@@ -38,8 +49,8 @@ export default function App() {
 
   if (initializationError) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-brand-cream px-6">
-        <Text className="text-center text-base text-status-danger">
+      <SafeAreaView style={styles.screen}>
+        <Text style={styles.error}>
           {initializationError}
         </Text>
       </SafeAreaView>
@@ -48,8 +59,8 @@ export default function App() {
 
   if (!i18nInitialized) {
     return (
-      <SafeAreaView className="flex-1 items-center justify-center bg-brand-cream">
-        <Text className="text-base text-content-light">Loading...</Text>
+      <SafeAreaView style={styles.screen}>
+        <Text style={styles.subtitle}>Loading...</Text>
       </SafeAreaView>
     );
   }
@@ -65,16 +76,50 @@ function HomeScreen() {
   const { t } = useTranslation();
 
   return (
-    <SafeAreaView className="flex-1 bg-brand-cream dark:bg-surface-dark dark-media:bg-surface-dark">
+    <SafeAreaView
+      style={styles.screen}
+      className="dark:bg-surface-dark dark-media:bg-surface-dark"
+    >
       <StatusBar style="auto" />
-      <View className="flex-1 items-center justify-center px-6">
-        <Text className="text-center text-2xl font-bold text-brand-crimson">
+      <View style={styles.content}>
+        <Text style={styles.title} className="font-bold">
           {t("common.appName")}
         </Text>
-        <Text className="mt-2 text-center text-base text-content-light dark:text-content-dark dark-media:text-content-dark">
+        <Text style={styles.subtitle}>
           {t("pos.title")}
         </Text>
       </View>
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#FFFDF9",
+    paddingHorizontal: 24,
+  },
+  content: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    color: "#E51A1A",
+    fontSize: 24,
+    fontWeight: "700",
+    textAlign: "center",
+  },
+  subtitle: {
+    marginTop: 8,
+    color: "#141212",
+    fontSize: 16,
+    textAlign: "center",
+  },
+  error: {
+    color: "#C62828",
+    fontSize: 16,
+    textAlign: "center",
+  },
+});

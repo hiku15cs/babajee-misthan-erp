@@ -13,6 +13,9 @@
     },
     "android": {
       "package": "com.babajeemishthanbhandar.erp",
+      "permissions": [
+        "android.permission.BLUETOOTH_CONNECT"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#FFFDF9"
@@ -22,7 +25,10 @@
       "bundleIdentifier": "com.babajeemishthanbhandar.erp"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-status-bar",
+      "expo-router",
+      "expo-sqlite"
     ],
     "web": {
       "bundler": "metro"
