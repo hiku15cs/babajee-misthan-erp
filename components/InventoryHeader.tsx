@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { router, usePathname } from "expo-router";
 import { useTranslation } from "react-i18next";
@@ -16,6 +16,31 @@ export function InventoryHeader() {
   const pathname = usePathname();
   const { t, i18n } = useTranslation();
   const [languageError, setLanguageError] = useState("");
+  const [isOwner, setIsOwner] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    void supabase.auth.getUser().then(async ({ data, error }) => {
+      if (error) throw error;
+      if (!data.user) return;
+      const { data: profile, error: profileError } = await supabase
+        .from("profiles")
+        .select("role,is_active")
+        .eq("id", data.user.id)
+        .maybeSingle();
+      if (profileError) throw profileError;
+      if (active) setIsOwner(profile?.role === "OWNER" && profile.is_active);
+    }).catch((loadError: unknown) => {
+      if (active) {
+        setLanguageError(
+          loadError instanceof Error ? loadError.message : String(loadError),
+        );
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   async function chooseLanguage(language: AppLanguage) {
     setLanguageError("");
@@ -59,6 +84,14 @@ export function InventoryHeader() {
               </Text>
             </Pressable>
           ))}
+          {isOwner ? (
+            <Pressable
+              onPress={() => router.push("/(admin)/closing")}
+              style={styles.owner}
+            >
+              <Text style={styles.ownerText}>Owner insights</Text>
+            </Pressable>
+          ) : null}
           <Pressable onPress={() => void signOut()} style={styles.signOut}>
             <Text style={styles.signOutText}>{t("auth.signOut")}</Text>
           </Pressable>
@@ -118,6 +151,8 @@ const styles = StyleSheet.create({
   languageTextActive: { color: "#FFFFFF" },
   signOut: { paddingHorizontal: 8, paddingVertical: 10 },
   signOutText: { color: "#6B625E", fontSize: 13, fontWeight: "600" },
+  owner: { paddingHorizontal: 10, paddingVertical: 9, borderRadius: 8, backgroundColor: "#FFF3CF" },
+  ownerText: { color: "#604500", fontSize: 12, fontWeight: "800" },
   nav: { flexDirection: "row", paddingHorizontal: 12, paddingBottom: 10, gap: 8 },
   navButton: {
     paddingHorizontal: 14,

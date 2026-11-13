@@ -8,6 +8,7 @@ export type OwnerDailySummary = {
   udhaar_total: number;
   expected_cash: number;
   purchase_total: number;
+  fuel_purchase_total: number;
   fuel_total: number;
   wastage_total: number;
   overhead_total: number;
@@ -42,6 +43,7 @@ export function parseOwnerDailySummary(value: unknown): OwnerDailySummary {
     udhaar_total: numberValue(value.udhaar_total),
     expected_cash: numberValue(value.expected_cash),
     purchase_total: numberValue(value.purchase_total),
+    fuel_purchase_total: numberValue(value.fuel_purchase_total),
     fuel_total: numberValue(value.fuel_total),
     wastage_total: numberValue(value.wastage_total),
     overhead_total: numberValue(value.overhead_total),

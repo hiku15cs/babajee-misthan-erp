@@ -236,3 +236,10 @@ sales queue contract, migration order, direct Bluetooth printer helper, EAS
 preview/development profiles, and tablet installation instructions. The
 current direct thermal printer bridge supports paired Bluetooth printers;
 USB OTG requires a compatible native printer transport.
+
+## Phase 4 owner insights and administration
+
+See [`PHASE4_OWNER_INSIGHTS.md`](./PHASE4_OWNER_INSIGHTS.md) to apply
+`supabase/migrations/202611140001_owner_insights.sql`, deploy the
+`admin-create-user` Supabase Edge Function, and configure the Owner-only
+closing, P&L, audit, and user-management screens.

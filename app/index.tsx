@@ -5,6 +5,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { supabase } from "../lib/supabase";
 
+async function routeSignedInUser(): Promise<void> {
+  const { data: userData, error: userError } = await supabase.auth.getUser();
+  if (userError) throw userError;
+  if (!userData.user) return;
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role,is_active")
+    .eq("id", userData.user.id)
+    .maybeSingle();
+  if (profileError) throw profileError;
+  router.replace(
+    profile?.role === "OWNER" && profile.is_active
+      ? "/(admin)/closing"
+      : "/(inventory)/procurement",
+  );
+}
+
 export default function SignInScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,11 +31,15 @@ export default function SignInScreen() {
 
   useEffect(() => {
     let active = true;
-    void supabase.auth.getSession().then(({ data, error: sessionError }) => {
-      if (!active) return;
-      if (sessionError) setError(sessionError.message);
-      else if (data.session) router.replace("/(inventory)/procurement");
-      setLoading(false);
+    void supabase.auth.getSession().then(async ({ data, error: sessionError }) => {
+      if (sessionError) throw sessionError;
+      if (data.session) await routeSignedInUser();
+    }).catch((sessionError: unknown) => {
+      if (active) {
+        setError(sessionError instanceof Error ? sessionError.message : String(sessionError));
+      }
+    }).finally(() => {
+      if (active) setLoading(false);
     });
     return () => {
       active = false;
@@ -37,12 +58,18 @@ export default function SignInScreen() {
       email: email.trim(),
       password,
     });
-    setSubmitting(false);
     if (signInError) {
+      setSubmitting(false);
       setError(signInError.message);
       return;
     }
-    router.replace("/(inventory)/procurement");
+    try {
+      await routeSignedInUser();
+    } catch (routeError) {
+      setError(routeError instanceof Error ? routeError.message : String(routeError));
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (

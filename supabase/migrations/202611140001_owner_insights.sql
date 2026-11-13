@@ -14,6 +14,35 @@ create table if not exists public.daily_operating_costs (
 create index if not exists daily_operating_costs_date_type_idx
   on public.daily_operating_costs (cost_date, cost_type);
 
+drop trigger if exists profiles_audit_changes on public.profiles;
+create trigger profiles_audit_changes
+after update or delete on public.profiles
+for each row execute function public.log_inventory_changes();
+
+drop trigger if exists material_procurements_audit_changes
+  on public.material_procurements;
+create trigger material_procurements_audit_changes
+after insert or update or delete on public.material_procurements
+for each row execute function public.log_inventory_changes();
+
+drop trigger if exists product_batches_audit_changes
+  on public.product_batches;
+create trigger product_batches_audit_changes
+after insert or update or delete on public.product_batches
+for each row execute function public.log_inventory_changes();
+
+drop trigger if exists product_batch_returns_audit_changes
+  on public.product_batch_returns;
+create trigger product_batch_returns_audit_changes
+after insert or update or delete on public.product_batch_returns
+for each row execute function public.log_inventory_changes();
+
+drop trigger if exists daily_operating_costs_audit_changes
+  on public.daily_operating_costs;
+create trigger daily_operating_costs_audit_changes
+after insert or update or delete on public.daily_operating_costs
+for each row execute function public.log_inventory_changes();
+
 create table if not exists public.daily_closings (
   id uuid primary key default gen_random_uuid(),
   closing_date date not null unique,
@@ -26,6 +55,18 @@ create table if not exists public.daily_closings (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
+
+drop trigger if exists daily_closings_touch_updated_at
+  on public.daily_closings;
+create trigger daily_closings_touch_updated_at
+before update on public.daily_closings
+for each row execute function public.touch_updated_at();
+
+drop trigger if exists daily_closings_audit_changes
+  on public.daily_closings;
+create trigger daily_closings_audit_changes
+after insert or update or delete on public.daily_closings
+for each row execute function public.log_inventory_changes();
 
 alter table public.daily_operating_costs enable row level security;
 alter table public.daily_closings enable row level security;
@@ -58,6 +99,7 @@ declare
   upi_total numeric(14, 2) := 0;
   udhaar_total numeric(14, 2) := 0;
   purchase_total numeric(14, 2) := 0;
+  fuel_purchase_total numeric(14, 2) := 0;
   fuel_total numeric(14, 2) := 0;
   wastage_total numeric(14, 2) := 0;
   overhead_total numeric(14, 2) := 0;
@@ -101,7 +143,16 @@ begin
   select coalesce(sum(mp.total_cost), 0)
   into purchase_total
   from public.material_procurements mp
-  where mp.created_at >= day_start and mp.created_at < day_end;
+  where mp.created_at >= day_start
+    and mp.created_at < day_end
+    and mp.category_group <> 'FUEL';
+
+  select coalesce(sum(mp.total_cost), 0)
+  into fuel_purchase_total
+  from public.material_procurements mp
+  where mp.created_at >= day_start
+    and mp.created_at < day_end
+    and mp.category_group = 'FUEL';
 
   select
     coalesce(sum(case when cost_type = 'FUEL_CONSUMED' then amount else 0 end), 0),
@@ -123,6 +174,7 @@ begin
     'udhaar_total', udhaar_total,
     'expected_cash', cash_total,
     'purchase_total', purchase_total,
+    'fuel_purchase_total', fuel_purchase_total,
     'fuel_total', fuel_total,
     'wastage_total', wastage_total,
     'overhead_total', overhead_total,
